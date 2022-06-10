@@ -1,0 +1,22 @@
+.swiper {
+    height: 50%;
+    width: 70%;
+}
+ 
+.swiper-pagination-bullet {
+    background-color: white;
+} 
+
+.prev-button, .next-button {
+    z-index: 9999;
+    position: absolute;
+    top: 91.5%;
+}
+
+.prev-button {
+    left: 15%;
+}
+
+.next-button {
+    right: 15%;
+}
