@@ -1,8 +1,55 @@
-import React from "react";
-import google from "./google.svg";
-import logomark from "./Logomark.svg";
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { userLogin, verifyToken } from '../../../services/user.service'
+import google from '../../../assets/img/google.svg'
+import logomark from '../../../assets/img/Logomark.svg'
+import { useSnackbar } from 'notistack'
+//utils
+const sha256 = require('sha256')
 
-function Login() {
+function LogInForm() {
+  const navigate = useNavigate()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleEmailInput = (e) => {
+    setEmail(e.target.value)
+  }
+
+  const handlePasswordInput = (e) => {
+    setPassword(e.target.value)
+  }
+
+  const handleSignIn = () => {
+    let data = { email: email, password: sha256(password) }
+    userLogin(data)
+      .then((response) => {
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('id', response.data.userID)
+      })
+      .then(() => navigate('/dashboard'))
+      .catch((err) => {
+        console.log(err)
+        if (err?.response?.data) {
+          enqueueSnackbar(err.response.data.message, {
+            variant: 'error',
+            anchorOrigin: { vertical: 'top', horizontal: 'right' },
+            autoHideDuration: 2000,
+          })
+        }
+      })
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token && token !== '') {
+      verifyToken({ token })
+        .then(() => navigate('/dashboard'))
+        .catch((e) => console.log(e))
+    }
+  }, [])
+
   return (
     <div className="bg-white flex place-content-center w-1/2 h-screen py-16">
       <div className="w-1/2">
@@ -27,6 +74,8 @@ function Login() {
                 name="email"
                 placeholder="Enter your email"
                 required
+                value={email}
+                onChange={(e) => handleEmailInput(e)}
               />
             </div>
             <div className="input-container flex flex-col mt-3">
@@ -35,8 +84,9 @@ function Login() {
                 className="border-2 border-solid border-gray-200 rounded-lg h-12 px-3 mt-2"
                 type="password"
                 name="password"
-                placeholder="**********"
-                required
+                placeholder="********"
+                value={password}
+                onChange={(e) => handlePasswordInput(e)}
               />
             </div>
             <div className="flex justify-between mt-5">
@@ -58,7 +108,10 @@ function Login() {
             </div>
 
             <div className="flex flex-col mt-5">
-              <div className="bg-[#3339cb] h-12 text-white rounded-lg flex place-content-center items-center font-medium text-sm">
+              <div
+                onClick={() => handleSignIn()}
+                className="bg-[#3339cb] h-12 text-white rounded-lg flex place-content-center items-center font-medium text-sm cursor-pointer"
+              >
                 Sign in
               </div>
               <div className="mt-4 border-2 border-solid border-gray-200 h-12 rounded-lg flex place-content-center items-center">
@@ -69,16 +122,18 @@ function Login() {
               </div>
               <div className="mt-6 text-center">
                 <span className="text-gray-500">Don't have an account?</span>
-                <span className="font-semibold text-[#3339cb] ml-1">
-                  Sign up
-                </span>
+                <Link to="/signup">
+                  <span className="font-semibold text-[#3339cb] ml-1">
+                    Sign up
+                  </span>
+                </Link>
               </div>
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default LogInForm

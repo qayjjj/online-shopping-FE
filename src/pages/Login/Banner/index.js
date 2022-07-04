@@ -1,18 +1,18 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import { useSwiper } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import augmentedReality from "./augmented_reality.svg";
-import stats from "./stats.svg";
-import programmer from "./programmer.svg";
-import mobileInterface from "./mobile_interface.svg";
-import "./styles.css";
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination, Navigation } from 'swiper'
+import { useSwiper } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/navigation'
+import augmentedReality from '../../../assets/img/augmented_reality.svg'
+import stats from '../../../assets/img/stats.svg'
+import programmer from '../../../assets/img/programmer.svg'
+import mobileInterface from '../../../assets/img/mobile_interface.svg'
+import './styles.css'
 
-function Landing() {
+function LogInBanner() {
   const SwiperButtonPrev = () => {
-    const swiper = useSwiper();
+    const swiper = useSwiper()
     return (
       <button
         className="prev-button cursor-pointer -rotate-90"
@@ -20,10 +20,10 @@ function Landing() {
       >
         <span className="text-xl text-white opacity-80">^</span>
       </button>
-    );
-  };
+    )
+  }
   const SwiperButtonNext = () => {
-    const swiper = useSwiper();
+    const swiper = useSwiper()
     return (
       <button
         className="next-button cursor-pointer rotate-90 "
@@ -31,11 +31,11 @@ function Landing() {
       >
         <span className="text-xl text-white opacity-80">^</span>
       </button>
-    );
-  };
+    )
+  }
 
   return (
-    <div className="bg-gradient-to-tr from-[#3034a7] to-[#444ce3] w-1/2 flex items-center">
+    <div className="bg-gradient-to-tr from-[#3034a7] to-[#444ce3] w-1/2 h-screen flex items-center">
       <Swiper
         slidesPerView={1}
         spaceBetween={30}
@@ -76,7 +76,7 @@ function Landing() {
         <SwiperButtonNext />
       </Swiper>
     </div>
-  );
+  )
 }
 
-export default Landing;
+export default LogInBanner
