@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Clear } from '@mui/icons-material'
 import {
   Button,
@@ -18,6 +18,8 @@ import {
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import countries from './countries'
+import { addAddress, editAddress } from '../../../../services/address.service'
+import { useSnackbar } from 'notistack'
 
 const validationSchema = yup.object().shape({
   userID: yup.string(),
@@ -32,38 +34,78 @@ const validationSchema = yup.object().shape({
   defaultAddress: yup.bool(),
 })
 
-export default function AddAddressForm() {
-  const [openDialog, setOpenDialog] = useState(false)
+export default function AddressForm(props) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
-  const handleOnSubmit = () => {
-    console.log(formik.values)
+  const handleOnSubmit = async (values) => {
+    const data = {
+      item: {
+        name: values.name,
+        phoneNumber: values.phoneNumber,
+        address: values.address,
+        city: values.city,
+        state: values?.state,
+        zipCode: values.zipCode,
+        country: values.country,
+        addressType: values.addressType,
+        defaultAddress: values.defaultAddress,
+      },
+      addressID: props?.formValues?._id,
+      token: localStorage.getItem('token'),
+    }
+    let result = null
+    try {
+      if (props.edit) result = await editAddress(data)
+      else result = await addAddress(data)
+      if (result) {
+        enqueueSnackbar('Success', {
+          variant: 'success',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          autoHideDuration: 2000,
+        })
+        props.setShowAddressForm(false)
+        formik.resetForm({ values: '' })
+        props.handleListAddresses()
+      }
+    } catch (err) {
+      if (err?.response?.data) {
+        enqueueSnackbar(err.response.data.message, {
+          variant: 'error',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          autoHideDuration: 2000,
+        })
+      } else {
+        enqueueSnackbar("Something's wrong.", {
+          variant: 'error',
+          anchorOrigin: { vertical: 'top', horizontal: 'right' },
+          autoHideDuration: 2000,
+        })
+      }
+    }
   }
 
   const formik = useFormik({
     initialValues: {
-      userID: '',
-      name: '',
-      phoneNumber: '',
-      address: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-      addressType: 'home',
-      defaultAddress: true,
+      name: props.edit ? props.formValues.name : '',
+      phoneNumber: props.edit ? props.formValues.phoneNumber : '',
+      address: props.edit ? props.formValues.address : '',
+      city: props.edit ? props.formValues.city : '',
+      state: props.edit ? props.formValues.state : '',
+      zipCode: props.edit ? props.formValues.zipCode : '',
+      country: props.edit ? props.formValues.country : '',
+      addressType: props.edit ? props.formValues.addressType : 'home',
+      defaultAddress: props.edit ? props.formValues.defaultAddress : true,
     },
     validationSchema,
+    enableReinitialize: true,
     onSubmit: handleOnSubmit,
   })
+
   return (
     <div>
-      <Button className="mt-4" onClick={() => setOpenDialog(true)}>
-        <span className="text-2xl mb-1">+</span>
-        <span className="ml-2">Add New Address</span>
-      </Button>
       <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
+        open={props.showAddressForm}
+        onClose={() => props.setShowAddressForm(false)}
         maxWidth="sm"
         fullWidth
         scroll="body"
@@ -71,10 +113,12 @@ export default function AddAddressForm() {
         <Card className="px-10 pt-5 pb-3 relative">
           <Clear
             className="absolute right-2 top-2 text-gray-500 cursor-pointer"
-            onClick={() => setOpenDialog(false)}
+            onClick={() => props.setShowAddressForm(false)}
           />
           {/* Form label */}
-          <h1 className="text-center text-2xl">Add New Address</h1>
+          <h1 className="text-center text-2xl">
+            {props.edit ? 'Edit Address' : 'Add New Address'}
+          </h1>
           <form className="flex flex-col mt-4" onSubmit={formik.handleSubmit}>
             {/* Address type */}
             <RadioGroup
@@ -210,23 +254,34 @@ export default function AddAddressForm() {
             </FormControl>
 
             {/* Set address as default */}
-            <FormControlLabel
-              className="mt-4"
-              control={
-                <Checkbox
-                  id="defaultAddress"
-                  name="defaultAddress"
-                  value={formik.values.defaultAddress}
-                  checked={formik.values.defaultAddress}
-                  onChange={formik.handleChange}
-                />
-              }
-              label="Set this address as default"
-            />
+            {(!props.edit || !props.formValues.defaultAddress) && (
+              <FormControlLabel
+                className="mt-4"
+                control={
+                  <Checkbox
+                    id="defaultAddress"
+                    name="defaultAddress"
+                    value={formik.values.defaultAddress}
+                    checked={formik.values.defaultAddress}
+                    onChange={formik.handleChange}
+                  />
+                }
+                label="Set this address as default"
+              />
+            )}
 
-            <div className="text-center mt-4">
-              <Button className="w-1/5" variant="contained" type="submit">
-                Submit
+            <div className="text-center mt-6 flex place-content-center">
+              {props.edit && (
+                <Button
+                  className="w-fit mr-2"
+                  variant="outlined"
+                  onClick={() => props.setShowAddressForm(false)}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button className="w-fit" variant="contained" type="submit">
+                {props.edit ? 'Save Changes' : 'Submit'}
               </Button>
             </div>
           </form>

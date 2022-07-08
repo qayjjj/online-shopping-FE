@@ -8,6 +8,7 @@ import { Fade } from 'react-reveal'
 import DetailsSkeleton from './Skeleton'
 import DetailsNavbar from './Navbar'
 import { addToCart, getTotalCartItems } from '../../services/cart.service'
+import Navigation from '../Navigation'
 
 export default function Details() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -75,6 +76,7 @@ export default function Details() {
 
   return (
     <div className="px-32 py-20">
+      <Navigation />
       <DetailsNavbar cartNumber={cartNumber} />
       {isLoading ? (
         <DetailsSkeleton />

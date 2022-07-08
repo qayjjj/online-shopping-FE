@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTotalCartValue, viewCart } from '../../services/cart.service'
+import Navigation from '../Navigation'
 import OrderSummary from './OrderSummary'
 import OrderTable from './OrderTable'
 import CartSkeleton from './Skeleton'
@@ -32,11 +33,6 @@ export default function Cart() {
       .then(() => setIsLoading(false))
       .catch((e) => {
         setIsLoading(false)
-        enqueueSnackbar("Can't fetch cart", {
-          variant: 'error',
-          anchorOrigin: { vertical: 'top', horizontal: 'right' },
-          autoHideDuration: 2000,
-        })
       })
   }
 
@@ -64,6 +60,7 @@ export default function Cart() {
           </Grid>
         </Grid>
       )}
+      <Navigation />
     </div>
   )
 }

@@ -1,8 +1,22 @@
 import React from 'react'
-import { Button, Link } from '@mui/material'
+import { Button } from '@mui/material'
 import Discounts from './Discounts'
+import { completeOrder } from '../../../services/order.service'
+import { useNavigate } from 'react-router-dom'
 
 export default function OrderSummary(props) {
+  const navigate = useNavigate()
+
+  const handleCompleteOrder = () => {
+    const data = {
+      addressID: props.billingAddress._id,
+      token: localStorage.getItem('token'),
+    }
+    completeOrder(data)
+      .then((res) => navigate(`/order/${res.data.message._id}`))
+      .catch((e) => console.log(e))
+  }
+
   return (
     <>
       <h1 className="text-xl font-semibold">Order Summary</h1>
@@ -15,7 +29,7 @@ export default function OrderSummary(props) {
       <div className="flex flex-col border-t-[1px] border-solid border-gray-300 mt-6 text-sm">
         <div className="flex justify-between mt-4">
           <p>Sub Total</p>
-          <p>$ {props.totalValue}</p>
+          <p>{props.totalValue == 0 ? '-' : `{$ ${props.totalValue}}`}</p>
         </div>
         <div className="flex justify-between mt-2">
           <p>Discount</p>
@@ -27,11 +41,19 @@ export default function OrderSummary(props) {
         </div>
         <div className="border-t-[1px] border-solid border-black flex justify-between mt-4 pt-2 text-lg">
           <p className="">Total</p>
-          <p>$ {props.totalValue}</p>
+          <p>{props.totalValue == 0 ? '-' : `{$ ${props.totalValue}}`}</p>
         </div>
       </div>
 
-      {!props.checkout && (
+      {props.checkout ? (
+        <Button
+          variant="contained"
+          className="w-full h-10 mt-4"
+          onClick={handleCompleteOrder}
+        >
+          Complete Order
+        </Button>
+      ) : (
         <div>
           <Button
             href="/checkout"

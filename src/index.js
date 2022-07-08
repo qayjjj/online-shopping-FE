@@ -5,7 +5,6 @@ import './index.css'
 
 import App from './App'
 import { SnackbarProvider } from 'notistack'
-import { StyledEngineProvider } from '@mui/material'
 
 ReactDOM.render(
   <BrowserRouter>

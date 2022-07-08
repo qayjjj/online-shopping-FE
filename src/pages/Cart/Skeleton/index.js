@@ -14,7 +14,7 @@ import {
 import { Delete } from '@mui/icons-material'
 import Discounts from '../OrderSummary/Discounts'
 
-const listArraySkeletion = [1, 2, 3]
+const listArraySkeleton = [1, 2, 3]
 
 export default function CartSkeleton() {
   return (
@@ -32,7 +32,7 @@ export default function CartSkeleton() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {listArraySkeletion.map((item) => (
+              {listArraySkeleton.map((item) => (
                 <TableRow key={item._id}>
                   <TableCell className="flex items-center">
                     <div className="w-16 h-16 overflow-x-hidden rounded-md grid place-items-center">

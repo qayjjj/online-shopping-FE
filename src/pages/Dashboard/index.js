@@ -21,6 +21,7 @@ import { listProducts, deleteProduct } from '../../services/product.service'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { Fade } from 'react-reveal'
+import Navigation from '../Navigation'
 
 const listArraySkeletion = [1, 2, 3, 4]
 
@@ -187,6 +188,7 @@ export default function Dashboard() {
           </DialogActions>
         </Dialog>
       </Grid>
+      <Navigation />
     </div>
   )
 }
