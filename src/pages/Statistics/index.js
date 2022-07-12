@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { DatePicker } from '@mui/x-date-pickers'
 import dayjs from 'dayjs'
@@ -10,22 +9,30 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Line } from 'react-chartjs-2'
+import { Bar, Line } from 'react-chartjs-2'
 import { getAllOrders } from '../../services/order.service'
 import { Button, TextField } from '@mui/material'
 import isBetween from 'dayjs/plugin/isBetween'
-import { data } from 'autoprefixer'
-import { orderChartData, orderChartOptions } from './chart.config'
+import {
+  orderValueChartData,
+  orderQuantityChartData,
+  orderValueChartOptions,
+  orderQuantityChartOptions,
+} from './chart.config'
+import Navigation from 'pages/Navigation'
+
 dayjs.extend(isBetween)
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -35,7 +42,11 @@ export default function Statistics() {
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
   const [orderData, setOrderData] = useState({})
-  const [chartData, setChartData] = useState({ labels: [], datasets: [] })
+  const [chartData, setChartData] = useState({
+    labels: [],
+    valueData: [],
+    quantityData: [],
+  })
   const [errorMessage, setErrorMessage] = useState({
     startDate: '',
     endDate: '',
@@ -77,18 +88,31 @@ export default function Statistics() {
             '[]',
           ),
         )
-        let tmpChartData = { labels: [], data: [] }
-        let log = {}
+        let tmpChartData = { labels: [], valueData: [], quantityData: [] }
+        let valueLog = {}
+        let quantityLog = {}
+
         filteredData.forEach((order) => {
           const dateLabel = dayjs(order.createdAt).format('MM/DD/YYYY')
-          if (log[dateLabel]) log[dateLabel] += order.totalValue
-          else log[dateLabel] = order.totalValue
-        })
-        Object.keys(log).forEach((date) => {
-          tmpChartData.labels.push(date)
-          tmpChartData.data.push(log[date])
+
+          if (valueLog[dateLabel]) {
+            valueLog[dateLabel] += order.totalValue
+          } else {
+            valueLog[dateLabel] = order.totalValue
+          }
+
+          let quantity = 0
+          Object.keys(order.list).forEach((product) => {
+            quantity += order.list[product]
+          })
+          quantityLog[dateLabel] = quantity
         })
 
+        Object.keys(valueLog).forEach((date) => {
+          tmpChartData.labels.push(date)
+          tmpChartData.valueData.push(valueLog[date])
+          tmpChartData.quantityData.push(quantityLog[date])
+        })
         setChartData(tmpChartData)
       }
     }
@@ -96,7 +120,8 @@ export default function Statistics() {
   }
 
   return (
-    <div className="h-screen flex flex-col place-items-center py-16">
+    <div className="flex flex-col place-items-center py-16">
+      <Navigation />
       <h1 className="text-3xl font-semibold">Orders</h1>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -143,11 +168,23 @@ export default function Statistics() {
           </Button>
         </form>
       </LocalizationProvider>
-      {chartData.labels.length > 0 && (
-        <div className="w-2/3 mt-4">
+
+      {chartData.valueData.length > 0 && (
+        <div className="w-1/2 mt-4">
           <Line
-            options={orderChartOptions}
-            data={orderChartData(chartData.labels, chartData.data)}
+            options={orderValueChartOptions}
+            data={orderValueChartData(chartData.labels, chartData.valueData)}
+          />
+        </div>
+      )}
+      {chartData.quantityData.length > 0 && (
+        <div className="w-1/2 mt-6">
+          <Bar
+            options={orderQuantityChartOptions}
+            data={orderQuantityChartData(
+              chartData.labels,
+              chartData.quantityData,
+            )}
           />
         </div>
       )}

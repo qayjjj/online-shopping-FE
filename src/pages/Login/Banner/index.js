@@ -4,10 +4,10 @@ import { useSwiper } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import augmentedReality from '../../../assets/img/augmented_reality.svg'
-import stats from '../../../assets/img/stats.svg'
-import programmer from '../../../assets/img/programmer.svg'
-import mobileInterface from '../../../assets/img/mobile_interface.svg'
+import augmentedReality from 'assets/img/augmented_reality.svg'
+import stats from 'assets/img/stats.svg'
+import programmer from 'assets/img/programmer.svg'
+import mobileInterface from 'assets/img/mobile_interface.svg'
 import './styles.css'
 
 function LogInBanner() {
@@ -35,7 +35,7 @@ function LogInBanner() {
   }
 
   return (
-    <div className="bg-gradient-to-tr from-[#3034a7] to-[#444ce3] w-1/2 h-screen flex items-center">
+    <div className="bg-gradient-to-tr from-[#3034a7] to-[#444ce3] w-1/2 h-full flex items-center">
       <Swiper
         slidesPerView={1}
         spaceBetween={30}
