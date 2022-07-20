@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { viewProductDetails } from '../../services/product.service'
+import { viewProductDetails } from 'services/product.service'
 import { Grid, Button, Card, CardActionArea, Modal } from '@mui/material'
 import { AddCircle, RemoveCircle, AddShoppingCart } from '@mui/icons-material'
 import { Fade } from 'react-reveal'
 import DetailsSkeleton from './Skeleton'
 import DetailsNavbar from './Navbar'
-import { addToCart, getTotalCartItems } from '../../services/cart.service'
-import Navigation from '../Navigation'
+import { addToCart, getTotalCartItems } from 'services/cart.service'
+import Navigation from 'components/Navigation'
 
 export default function Details() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -39,7 +39,7 @@ export default function Details() {
       )
   }, [])
 
-  const handleAddToCart = () => {
+  const handleCartAction = (buyNowOption) => {
     const token = localStorage.getItem('token')
     if (token) {
       const data = {
@@ -49,9 +49,10 @@ export default function Details() {
       }
       addToCart(data)
         .then(() =>
-          getTotalCartItems({ token }).then((res) =>
-            setCartNumber(res.data.message),
-          ),
+          getTotalCartItems({ token }).then((res) => {
+            setCartNumber(res.data.message)
+            buyNowOption && navigate('/cart')
+          }),
         )
         .then(() =>
           enqueueSnackbar('Added to cart', {
@@ -134,15 +135,18 @@ export default function Details() {
                     <div className="flex w-full justify-between mt-8 border-t-2 border-dashed border-gray-200 pt-10">
                       <Button
                         variant="contained"
-                        color="warning"
-                        className="w-2/5 h-14"
-                        onClick={handleAddToCart}
+                        className="w-2/5 h-14 bg-[#ffcd68] hover:bg-[#ffcd68]"
+                        onClick={() => handleCartAction(false)}
                       >
                         <AddShoppingCart className="w-8" />
                         Add to cart
                       </Button>
                       <p className="flex items-center text-gray-500">- OR -</p>
-                      <Button variant="contained" className="w-2/5 h-14">
+                      <Button
+                        variant="contained"
+                        className="w-2/5 h-14"
+                        onClick={() => handleCartAction(true)}
+                      >
                         Buy now
                       </Button>
                     </div>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Card } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
-import { getOrderDetails } from '../../services/order.service'
-import shopping from '../../assets/img/shopping.svg'
+import { getOrderDetails } from 'services/order.service'
+import shopping from 'assets/img/shopping.svg'
 
 export default function Order() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()

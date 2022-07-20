@@ -18,7 +18,7 @@ import {
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import countries from './countries'
-import { addAddress, editAddress } from '../../../../services/address.service'
+import { addAddress, editAddress } from 'services/address.service'
 import { useSnackbar } from 'notistack'
 
 const validationSchema = yup.object().shape({

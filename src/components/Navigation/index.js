@@ -25,14 +25,18 @@ export default function Navigation() {
         }`}
       >
         <RadioButtonChecked
-          className="cursor-pointer text-gray-500 hover:text-blue-500"
+          className="cursor-pointer text-gray-400 hover:text-[#6c63ff]"
           onClick={() => setShowNavigation((prev) => !prev)}
         />
       </div>
       <div className="flex flex-col mt-6">
         <div
-          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer text-gray-500 hover:text-blue-500 hover:bg-gray-100 rounded-md
-          ${pathname == '/dashboard' && 'text-blue-500 bg-gray-100'}
+          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer hover:text-[#6c63ff] hover:bg-gray-100 rounded-md
+          ${
+            pathname == '/dashboard'
+              ? 'text-[#6c63ff] bg-gray-100'
+              : 'text-gray-400'
+          }
           `}
           onClick={() => navigate('/dashboard')}
         >
@@ -40,8 +44,10 @@ export default function Navigation() {
           <h1 className="ml-3">Dashboard</h1>
         </div>
         <div
-          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer text-gray-500 hover:text-blue-500 hover:bg-gray-100 rounded-md
-          ${pathname == '/cart' && 'text-blue-500 bg-gray-100'}
+          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer  hover:text-[#6c63ff] hover:bg-gray-100 rounded-md
+          ${
+            pathname == '/cart' ? 'text-[#6c63ff] bg-gray-100' : 'text-gray-400'
+          }
           `}
           onClick={() => navigate('/cart')}
         >
@@ -49,8 +55,12 @@ export default function Navigation() {
           <h1 className="ml-3">Cart</h1>
         </div>
         <div
-          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer text-gray-500 hover:text-blue-500 hover:bg-gray-100 rounded-md
-          ${pathname == '/statistics' && 'text-blue-500 bg-gray-100'}
+          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer hover:text-[#6c63ff] hover:bg-gray-100 rounded-md
+          ${
+            pathname == '/statistics'
+              ? 'text-[#6c63ff] bg-gray-100'
+              : 'text-gray-400'
+          }
           `}
           onClick={() => navigate('/statistics')}
         >

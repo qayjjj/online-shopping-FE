@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@mui/material'
 import Discounts from './Discounts'
-import { completeOrder } from '../../../services/order.service'
+import { completeOrder } from 'services/order.service'
 import { useNavigate } from 'react-router-dom'
 
 export default function OrderSummary(props) {
@@ -29,7 +29,7 @@ export default function OrderSummary(props) {
       <div className="flex flex-col border-t-[1px] border-solid border-gray-300 mt-6 text-sm">
         <div className="flex justify-between mt-4">
           <p>Sub Total</p>
-          <p>{props.totalValue == 0 ? '-' : `{$ ${props.totalValue}}`}</p>
+          <p>{props.totalValue == 0 ? '-' : `$ ${props.totalValue}`}</p>
         </div>
         <div className="flex justify-between mt-2">
           <p>Discount</p>
@@ -41,7 +41,7 @@ export default function OrderSummary(props) {
         </div>
         <div className="border-t-[1px] border-solid border-black flex justify-between mt-4 pt-2 text-lg">
           <p className="">Total</p>
-          <p>{props.totalValue == 0 ? '-' : `{$ ${props.totalValue}}`}</p>
+          <p>{props.totalValue == 0 ? '-' : `$ ${props.totalValue}`}</p>
         </div>
       </div>
 
@@ -58,6 +58,7 @@ export default function OrderSummary(props) {
           <Button
             href="/checkout"
             variant="contained"
+            disabled={props.totalValue == 0}
             className="w-full h-10 mt-6"
           >
             Continue to check out

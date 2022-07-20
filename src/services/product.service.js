@@ -35,3 +35,17 @@ export const viewProductDetails = (params) => {
     params,
   })
 }
+
+export const getAllProducts = () => {
+  return axios({
+    method: 'GET',
+    url: `${userURL}/getAll`,
+  })
+}
+export const getTopProducts = (data) => {
+  return axios({
+    method: 'GET',
+    url: `${userURL}/getTop`,
+    data,
+  })
+}

@@ -27,3 +27,11 @@ export const verifyToken = (data) => {
     data,
   })
 }
+
+export const getAllUsers = (data) => {
+  return axios({
+    method: 'GET',
+    url: `${userURL}/getAll`,
+    data,
+  })
+}

@@ -3,7 +3,7 @@ import { Button, Card, TextField, Dialog, InputAdornment } from '@mui/material'
 import HighlightOff from '@mui/icons-material/HighlightOff'
 import Clear from '@mui/icons-material/Clear'
 import * as yup from 'yup'
-import { addProduct, listProducts } from '../../../services/product.service'
+import { addProduct, listProducts } from 'services/product.service'
 import { useSnackbar } from 'notistack'
 import { useFormik } from 'formik'
 
@@ -179,7 +179,7 @@ export default function AddProductForm(props) {
                   className="mt-4 w-90"
                 />
                 <HighlightOff
-                  className="mt-2 text-gray-400 cursor-pointer hover:text-blue-500"
+                  className="mt-2 text-gray-400 cursor-pointer hover:text-[#6c63ff]"
                   onClick={() => formik.setFieldValue('image', '')}
                 />
               </div>

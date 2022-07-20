@@ -35,7 +35,7 @@ function LogInBanner() {
   }
 
   return (
-    <div className="bg-gradient-to-tr from-[#3034a7] to-[#444ce3] w-1/2 h-full flex items-center">
+    <div className="bg-gradient-to-tr from-[#3034a7] to-[#6c63ff] w-1/2 h-screen flex items-center overflow-y-scroll">
       <Swiper
         slidesPerView={1}
         spaceBetween={30}
@@ -53,7 +53,7 @@ function LogInBanner() {
               Welcome to your new dashboard
             </h1>
             <h2 className="text-xs mt-2 opacity-70">
-              Sign in to explore changes we've made.
+              Sign in to manage your products.
             </h2>
           </div>
         </SwiperSlide>

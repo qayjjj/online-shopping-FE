@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import AddressForm from './AddressForm'
-import { deleteAddress } from '../../../services/address.service'
+import { deleteAddress } from 'services/address.service'
 import { useSnackbar } from 'notistack'
 
 export default function Addresses(props) {
@@ -59,7 +59,7 @@ export default function Addresses(props) {
             <h1 className="text-xl">{item.name}</h1>
             <span className="text-gray-500 ml-2">({item.addressType})</span>
             {item.defaultAddress && (
-              <div className="text-xs ml-3 bg-blue-200 text-sky-800 px-1 py-[0.15rem] rounded-md">
+              <div className="text-xs ml-3 bg-[#6c63ff] text-white px-1 py-[0.15rem] rounded-md">
                 Default
               </div>
             )}
@@ -78,7 +78,7 @@ export default function Addresses(props) {
           <div className="flex items-center mt-2">
             <h1 className="grow text-sm text-gray-500">{item.phoneNumber}</h1>
             <Button
-              className="normal-case text-black border-gray-300 hover:text-[#007aff] px-1 py-1 rounded-lg text-sm font-medium"
+              className="normal-case text-black border-gray-300 hover:text-[#6c63ff] px-1 py-1 rounded-lg text-sm font-medium"
               variant="outlined"
               onClick={() => {
                 setShowDeleteDialog(true)

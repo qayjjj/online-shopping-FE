@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { userLogin, verifyToken } from '../../../services/user.service'
-import google from '../../../assets/img/google.svg'
-import logomark from '../../../assets/img/Logomark.svg'
 import { useSnackbar } from 'notistack'
+import * as yup from 'yup'
+import { useFormik } from 'formik'
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material'
+import { userLogin, verifyToken } from 'services/user.service'
+import google from 'assets/img/google.svg'
+import logomark from 'assets/img/Logomark.svg'
 //utils
 const sha256 = require('sha256')
+
+const validationSchema = yup.object().shape({
+  email: yup.string().required('Please enter email.'),
+  password: yup.string().required('Please enter password.'),
+})
 
 function LogInForm() {
   const navigate = useNavigate()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const handleEmailInput = (e) => {
-    setEmail(e.target.value)
-  }
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token && token !== '') {
+      verifyToken({ token })
+        .then(() => navigate('/dashboard'))
+        .catch((e) => console.log(e))
+    }
+  }, [])
 
-  const handlePasswordInput = (e) => {
-    setPassword(e.target.value)
-  }
-
-  const handleSignIn = () => {
-    let data = { email: email, password: sha256(password) }
+  const handleOnSubmit = (values) => {
+    let data = { email: values.email, password: sha256(values.password) }
     userLogin(data)
       .then((response) => {
         localStorage.setItem('token', response.data.token)
@@ -41,14 +48,14 @@ function LogInForm() {
       })
   }
 
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token && token !== '') {
-      verifyToken({ token })
-        .then(() => navigate('/dashboard'))
-        .catch((e) => console.log(e))
-    }
-  }, [])
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: handleOnSubmit,
+  })
 
   return (
     <div className="bg-white flex place-content-center w-1/2 h-screen py-16">
@@ -64,73 +71,70 @@ function LogInForm() {
           </h2>
         </div>
 
-        <div className="form mt-6">
-          <form>
-            <div className="input-container flex flex-col">
-              <label className="text-xs font-medium">Email</label>
-              <input
-                className="border-2 border-solid border-gray-200 rounded-lg h-12 px-3 mt-2"
-                type="text"
-                name="email"
-                placeholder="Enter your email"
-                required
-                value={email}
-                onChange={(e) => handleEmailInput(e)}
-              />
-            </div>
-            <div className="input-container flex flex-col mt-3">
-              <label className="text-xs font-medium">Password</label>
-              <input
-                className="border-2 border-solid border-gray-200 rounded-lg h-12 px-3 mt-2"
-                type="password"
-                name="password"
-                placeholder="********"
-                value={password}
-                onChange={(e) => handlePasswordInput(e)}
-              />
-            </div>
-            <div className="flex justify-between mt-5">
-              <div>
-                <input
-                  className="mb-0"
-                  type="checkbox"
-                  id="remember"
-                  name="remember"
-                  value="remember"
+        <form className="mt-6 flex flex-col" onSubmit={formik.handleSubmit}>
+          <TextField
+            id="email"
+            name="email"
+            label="Email"
+            variant="outlined"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            variant="outlined"
+            className="mt-4"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          <div className="flex justify-between items-center mt-2">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  style={{
+                    transform: 'scale(0.85)',
+                  }}
                 />
-                <label className="ml-2 text-xs font-medium" for="remember">
-                  Remember for 30 days
-                </label>
-              </div>
-              <h2 className="text-xs font-semibold mt-0.5 text-[#3339cb]">
-                Forgot password
-              </h2>
-            </div>
+              }
+              label={
+                <p className="text-gray-500 text-sm">Remember for 30 days</p>
+              }
+            />
+            <h2 className="text-sm font-semibold text-[#6c63ff]">
+              Forgot password
+            </h2>
+          </div>
 
-            <div className="flex flex-col mt-5">
-              <div
-                onClick={() => handleSignIn()}
-                className="bg-[#3339cb] h-12 text-white rounded-lg flex place-content-center items-center font-medium text-sm cursor-pointer"
-              >
-                Sign in
-              </div>
-              <div className="mt-4 border-2 border-solid border-gray-200 h-12 rounded-lg flex place-content-center items-center">
-                <img src={google} className="h-6" />
-                <span className="font-medium ml-2 text-sm">
-                  Sign in with Google
+          <div className="flex flex-col mt-5">
+            <Button variant="contained" type="submit" className="h-12">
+              Sign in
+            </Button>
+            <Button
+              variant="contained"
+              className="mt-4 h-12 bg-white hover:bg-white"
+            >
+              <img src={google} className="h-6" />
+              <span className="ml-2 text-black">Sign in with Google</span>
+            </Button>
+            <div className="mt-6 text-center">
+              <span className="text-gray-500">Don't have an account?</span>
+              <Link to="/signup">
+                <span className="font-semibold text-[#6c63ff] ml-1">
+                  Sign up
                 </span>
-              </div>
-              <div className="mt-6 text-center">
-                <span className="text-gray-500">Don't have an account?</span>
-                <Link to="/signup">
-                  <span className="font-semibold text-[#3339cb] ml-1">
-                    Sign up
-                  </span>
-                </Link>
-              </div>
+              </Link>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   )

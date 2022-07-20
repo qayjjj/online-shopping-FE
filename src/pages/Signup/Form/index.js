@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
-
-import * as yup from 'yup'
-import { userSignup } from '../../../services/user.service'
+import { Link } from 'react-router-dom'
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material'
 import { useSnackbar } from 'notistack'
+import { userSignup } from 'services/user.service'
+import * as yup from 'yup'
 //utils
 const sha256 = require('sha256')
+
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required.'),
   lastName: yup.string().required('Last name is required.'),
@@ -76,7 +76,7 @@ export default function SignUpForm() {
       <div className="w-1/2">
         <h1 className="text-2xl font-semibold">Register</h1>
         <h1 className="text-sm font-medium mt-10">
-          Manage all your lottery efficiently
+          Manage all your products efficiently
         </h1>
         <p className="text-xs text-gray-500 font-medium mt-4 leading-5">
           Let's get you all set up so you can verify your personal account and
@@ -86,175 +86,162 @@ export default function SignUpForm() {
       <form className="flex flex-col mt-8" onSubmit={formik.handleSubmit}>
         <div className="flex">
           {/* First Name */}
-          <div className="flex flex-col grow">
-            <label className="text-xs font-medium">First Name</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formik.values.firstName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.firstName && formik.errors.firstName && (
-              <span className="text-red-500 text-xs">
-                {formik.errors.firstName}
-              </span>
-            )}
-          </div>
+          <TextField
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            variant="outlined"
+            className="grow"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.firstName}
+            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+            helperText={formik.touched.firstName && formik.errors.firstName}
+          />
           {/* Last Name */}
-          <div className="flex flex-col grow ml-6">
-            <label className="text-xs font-medium">Last Name</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formik.values.lastName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.lastName && formik.errors.lastName && (
-              <span className="text-red-500 text-xs">
-                {formik.errors.lastName}
-              </span>
-            )}
-          </div>
+          <TextField
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            variant="outlined"
+            className="grow ml-6"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.lastName}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={formik.touched.lastName && formik.errors.lastName}
+          />
         </div>
 
         <div className="flex mt-4">
           {/* Phone number */}
-          <div className="flex flex-col grow">
-            <label className="text-xs font-medium">Phone Number</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="text"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formik.values.phoneNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.phoneNumber && formik.errors.phoneNumber && (
-              <span className="text-red-500 text-xs">
-                {formik.errors.phoneNumber}
-              </span>
-            )}
-          </div>
+          <TextField
+            id="phoneNumber"
+            name="phoneNumber"
+            label="Phone Number"
+            variant="outlined"
+            className="grow"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.phoneNumber}
+            error={
+              formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+            }
+            helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
+          />
           {/* Email */}
-          <div className="flex flex-col grow ml-6">
-            <label className="text-xs font-medium">Email</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="text"
-              id="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <span className="text-red-500 text-xs">
-                {formik.errors.email}
-              </span>
-            )}
-          </div>
+          <TextField
+            id="email"
+            name="email"
+            label="Email"
+            variant="outlined"
+            className="grow ml-6"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
         </div>
         <div className="flex mt-4">
           {/* Password */}
-          <div className="flex flex-col grow">
-            <label className="text-xs font-medium">Password</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="password"
-              id="password"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.password && formik.errors.password && (
-              <span className="text-red-500 text-xs">
-                {formik.errors.password}
-              </span>
-            )}
-          </div>
+          <TextField
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            variant="outlined"
+            className="grow"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+
           {/* Confirm password */}
-          <div className="flex flex-col grow ml-6">
-            <label className="text-xs font-medium">Confirm Password</label>
-            <input
-              className="border-2 border-solid border-gray-200 rounded-lg h-10 px-3 mt-2"
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formik.values.confirmPassword}
+          <TextField
+            id="confirmPassword"
+            name="confirmPassword"
+            type="confirmPassword"
+            label="Confirm Password"
+            variant="outlined"
+            className="grow ml-6"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.confirmPassword}
+            error={
+              formik.touched.confirmPassword &&
+              Boolean(formik.errors.confirmPassword)
+            }
+            helperText={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
+          />
+        </div>
+
+        <FormControlLabel
+          className="mt-4"
+          control={
+            <Checkbox
+              id="receive"
+              name="receive"
+              value={formik.values.receive}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              style={{
+                transform: 'scale(0.75)',
+              }}
             />
-            {formik.touched.confirmPassword &&
-              formik.errors.confirmPassword && (
-                <span className="text-red-500 text-xs">
-                  {formik.errors.confirmPassword}
+          }
+          label={
+            <p className="text-gray-500 text-xs">
+              Yes, I want to receive Lottery Display emails
+            </p>
+          }
+        />
+
+        <div className="flex flex-col">
+          <FormControlLabel
+            control={
+              <Checkbox
+                id="agree"
+                name="agree"
+                value={formik.values.agree}
+                onChange={formik.handleChange}
+                style={{
+                  transform: 'scale(0.75)',
+                }}
+              />
+            }
+            label={
+              <p className="text-gray-500 text-xs">
+                <span>I agree to all the </span>
+                <span className="font-medium text-[#6c63ff]">Term</span>
+                <span>, </span>
+                <span className="font-medium text-[#6c63ff]">
+                  Privacy Policy{' '}
                 </span>
-              )}
-          </div>
-        </div>
-        <div className="mt-8 flex items-center">
-          <input
-            type="checkbox"
-            id="receive"
-            name="receive"
-            value={formik.values.receive}
-            onChange={formik.handleChange}
+                <span>and </span>
+                <span className="font-medium text-[#6c63ff]">Fees</span>
+              </p>
+            }
           />
-          <label
-            className="ml-2 text-xs font-medium text-gray-500"
-            for="receive"
-          >
-            Yes, I want to receive Lottery Display emails
-          </label>
-        </div>
-        <div className="mt-4 flex items-center">
-          <input
-            className="mb-0"
-            type="checkbox"
-            id="agree"
-            name="agree"
-            value={formik.values.agree}
-            onChange={formik.handleChange}
-          />
-          <label
-            className="relative ml-2 text-xs font-medium text-gray-500"
-            for="agree"
-          >
-            <span>I agree to all the </span>
-            <span className="font-medium text-[#3339cb]">Term</span>
-            <span>, </span>
-            <span className="font-medium text-[#3339cb]">Privacy Policy </span>
-            <span>and </span>
-            <span className="font-medium text-[#3339cb]">Fees</span>
-
-            {formik.errors.agree && (
-              <span className="absolute top-4 block text-red-500 text-xs">
-                {formik.errors.agree}
-              </span>
-            )}
-          </label>
+          {formik.errors.agree && (
+            <span className="-mt-2 ml-8 text-[#d32f2f] text-xs">
+              {formik.errors.agree}
+            </span>
+          )}
         </div>
 
-        <button
-          type="submit"
-          className="bg-[#3339cb] mt-8 w-52 h-10 text-white rounded-lg flex place-content-center items-center font-medium text-sm cursor-pointer"
-        >
+        <Button variant="contained" type="submit" className="mt-5 w-52 h-10">
           Create Account
-        </button>
-        <div className="mt-6 ">
+        </Button>
+        <div className="mt-6">
           <span className="text-gray-500 text-sm">
             Already have an account?
           </span>
           <Link to="/login">
-            <span className="font-semibold text-[#3339cb] ml-1 text-sm">
+            <span className="font-semibold text-[#6c63ff] ml-1 text-sm">
               Log in
             </span>
           </Link>

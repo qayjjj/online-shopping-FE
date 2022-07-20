@@ -15,8 +15,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
-import { getAllOrders } from '../../services/order.service'
-import { Button, TextField } from '@mui/material'
+import { getAllOrders } from 'services/order.service'
+import { Button, Card, TextField } from '@mui/material'
 import isBetween from 'dayjs/plugin/isBetween'
 import {
   orderValueChartData,
@@ -24,7 +24,7 @@ import {
   orderValueChartOptions,
   orderQuantityChartOptions,
 } from './chart.config'
-import Navigation from 'pages/Navigation'
+import Navigation from 'components/Navigation'
 
 dayjs.extend(isBetween)
 ChartJS.register(
@@ -169,25 +169,28 @@ export default function Statistics() {
         </form>
       </LocalizationProvider>
 
-      {chartData.valueData.length > 0 && (
-        <div className="w-1/2 mt-4">
-          <Line
-            options={orderValueChartOptions}
-            data={orderValueChartData(chartData.labels, chartData.valueData)}
-          />
+      {chartData.valueData.length > 0 && chartData.quantityData.length > 0 && (
+        <div className="flex w-full mt-8 justify-center">
+          <Card className="w-2/5 h-96">
+            <Line
+              options={orderValueChartOptions}
+              data={orderValueChartData(chartData.labels, chartData.valueData)}
+            />
+          </Card>
+          <Card className="w-2/5 h-96 ml-8">
+            <Bar
+              options={orderQuantityChartOptions}
+              data={orderQuantityChartData(
+                chartData.labels,
+                chartData.quantityData,
+              )}
+            />
+          </Card>
         </div>
       )}
-      {chartData.quantityData.length > 0 && (
-        <div className="w-1/2 mt-6">
-          <Bar
-            options={orderQuantityChartOptions}
-            data={orderQuantityChartData(
-              chartData.labels,
-              chartData.quantityData,
-            )}
-          />
-        </div>
-      )}
+      {/* {chartData.quantityData.length > 0 && (
+        
+      )} */}
     </div>
   )
 }

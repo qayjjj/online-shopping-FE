@@ -5,8 +5,8 @@ export const orderValueChartData = (labels, data) => {
     datasets: [
       {
         label: 'Order value',
-        backgroundColor: 'rgb(255, 99, 132)',
-        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: '#6c63ff',
+        borderColor: '#6c63ff',
         data,
       },
     ],
@@ -20,7 +20,7 @@ export const orderQuantityChartData = (labels, data) => {
     datasets: [
       {
         label: 'Order quantity',
-        backgroundColor: 'rgb(255, 99, 132)',
+        backgroundColor: '#6c63ff',
         data,
       },
     ],
@@ -30,6 +30,7 @@ export const orderQuantityChartData = (labels, data) => {
 
 export const orderValueChartOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
@@ -40,6 +41,7 @@ export const orderValueChartOptions = {
 
 export const orderQuantityChartOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,

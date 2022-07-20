@@ -2,9 +2,9 @@ import { Grid, Button, Card } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OrderSummary from '../Cart/OrderSummary'
-import { getTotalCartValue } from '../../services/cart.service'
+import { getTotalCartValue } from 'services/cart.service'
 import { useSnackbar } from 'notistack'
-import { viewAddresses } from '../../services/address.service'
+import { viewAddresses } from 'services/address.service'
 import CheckoutSkeleton from './Skeleton'
 import Addresses from './Addresses'
 import BillingAddress from './Billing Address'
@@ -75,7 +75,7 @@ export default function Checkout() {
       {isLoading ? (
         <CheckoutSkeleton />
       ) : (
-        <Grid container spacing={2} className="h-[30rem] mt-6">
+        <Grid container spacing={2} className="h-[30rem] mt-4">
           <Grid item md={8}>
             <Addresses
               addresses={addresses}

@@ -14,7 +14,7 @@ import {
   Delete,
   ShoppingBag,
 } from '@mui/icons-material'
-import { addToCart, removeFromCart } from '../../../services/cart.service'
+import { addToCart, removeFromCart } from 'services/cart.service'
 
 export default function OrderTable(props) {
   const handleRemoveItem = (productID, option) => {
