@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material'
+import { Backdrop, CircularProgress } from '@mui/material'
 import Landing from 'pages/Landing'
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
@@ -13,10 +13,17 @@ const Order = lazy(() => import('./pages/Order'))
 const Statistics = lazy(() => import('./pages/Statistics'))
 const Products = lazy(() => import('./pages/Products'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
+const Chat = lazy(() => import('./pages/Chat'))
 
 function App() {
   return (
-    <Suspense fallback={<CircularProgress />}>
+    <Suspense
+      fallback={
+        <Backdrop>
+          <CircularProgress />
+        </Backdrop>
+      }
+    >
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/products" element={<Products />} />
@@ -29,6 +36,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order/:orderID" element={<Order />} />
         <Route path="/statistics" element={<Statistics />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Suspense>
   )

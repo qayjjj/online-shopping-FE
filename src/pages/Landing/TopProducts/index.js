@@ -57,7 +57,7 @@ export default function TopProducts(props) {
                       <img src={product.image} className="w-full min-h-full" />
                     </CardMedia>
                     <CardContent className="justify-self-start text-left">
-                      <h1 className="text-2xl">{product.name}</h1>
+                      <h1 className="text-2xl truncate">{product.name}</h1>
                       <p className="text-gray-500 text-sm mt-2 truncate">
                         {product.description}
                       </p>

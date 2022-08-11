@@ -1,10 +1,9 @@
-import React from 'react'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { SnackbarProvider } from 'notistack'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import './index.css'
 import App from './App'
-import { SnackbarProvider } from 'notistack'
+import './index.css'
 
 const theme = createTheme({
   palette: {

@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, Badge, Popover } from '@mui/material'
 import { ShoppingCart } from '@mui/icons-material'
+import { Badge, Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 export default function DetailsNavbar(props) {
   const navigate = useNavigate()

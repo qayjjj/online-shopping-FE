@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
@@ -16,6 +16,7 @@ const validationSchema = yup.object().shape({
 })
 
 function LogInForm() {
+  const { state } = useLocation()
   const navigate = useNavigate()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
@@ -23,7 +24,10 @@ function LogInForm() {
     const token = localStorage.getItem('token')
     if (token && token !== '') {
       verifyToken({ token })
-        .then(() => navigate('/dashboard'))
+        .then(() => {
+          if (state) navigate(state.currentPage)
+          else navigate('/')
+        })
         .catch((e) => console.log(e))
     }
   }, [])
@@ -35,7 +39,10 @@ function LogInForm() {
         localStorage.setItem('token', response.data.token)
         localStorage.setItem('id', response.data.userID)
       })
-      .then(() => navigate('/dashboard'))
+      .then(() => {
+        if (state) navigate(state.currentPage)
+        else navigate('/')
+      })
       .catch((err) => {
         console.log(err)
         if (err?.response?.data) {

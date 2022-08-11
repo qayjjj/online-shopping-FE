@@ -8,6 +8,7 @@ import { viewAddresses } from 'services/address.service'
 import CheckoutSkeleton from './Skeleton'
 import Addresses from './Addresses'
 import BillingAddress from './Billing Address'
+import Navigation from 'components/Navigation'
 
 export default function Checkout() {
   const navigate = useNavigate()
@@ -65,37 +66,36 @@ export default function Checkout() {
   useEffect(() => handleCheckout(), [])
 
   return (
-    <div className="px-32 py-24">
-      <div className="relative">
+    <>
+      <Navigation />
+      <div className="px-32 py-20">
         <h1 className="text-3xl font-semibold">Checkout</h1>
-        <Button className="absolute -top-10 right-0" onClick={handleLogOut}>
-          Log Out
-        </Button>
-      </div>
-      {isLoading ? (
-        <CheckoutSkeleton />
-      ) : (
-        <Grid container spacing={2} className="h-[30rem] mt-4">
-          <Grid item md={8}>
-            <Addresses
-              addresses={addresses}
-              handleListAddresses={handleListAddresses}
-              destination={destination}
-              setDestination={setDestination}
-            />
-          </Grid>
-          <Grid item md={4}>
-            {destination && <BillingAddress destination={destination} />}
-            <Card className="px-10 py-6">
-              <OrderSummary
-                totalValue={totalValue}
-                checkout={true}
-                billingAddress={destination}
+
+        {isLoading ? (
+          <CheckoutSkeleton />
+        ) : (
+          <Grid container spacing={2} className="h-[30rem] mt-4">
+            <Grid item md={8}>
+              <Addresses
+                addresses={addresses}
+                handleListAddresses={handleListAddresses}
+                destination={destination}
+                setDestination={setDestination}
               />
-            </Card>
+            </Grid>
+            <Grid item md={4}>
+              {destination && <BillingAddress destination={destination} />}
+              <Card className="px-10 py-6">
+                <OrderSummary
+                  totalValue={totalValue}
+                  checkout={true}
+                  billingAddress={destination}
+                />
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   )
 }

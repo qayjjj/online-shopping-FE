@@ -20,6 +20,14 @@ export const addProduct = (data) => {
   })
 }
 
+export const editProduct = (data) => {
+  return axios({
+    method: 'POST',
+    url: `${userURL}/dashboard/edit`,
+    data,
+  })
+}
+
 export const listProducts = (data) => {
   return axios({
     method: 'POST',

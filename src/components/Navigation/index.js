@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import {
+  Home,
   RadioButtonChecked,
   GridView,
   ShoppingCart,
   BarChart,
+  Logout,
+  Chat,
 } from '@mui/icons-material'
 import { useNavigate, useLocation } from 'react-router-dom'
 
@@ -11,6 +14,11 @@ export default function Navigation() {
   const [showNavigation, setShowNavigation] = useState(false)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const handleLogOut = () => {
+    localStorage.removeItem('token')
+    navigate('/')
+  }
 
   return (
     <div
@@ -30,6 +38,13 @@ export default function Navigation() {
         />
       </div>
       <div className="flex flex-col mt-6">
+        <div
+          className="flex justify-start py-2 px-2 mt-6 cursor-pointer text-gray-400 hover:text-[#6c63ff] hover:bg-gray-100 rounded-md"
+          onClick={() => navigate('/')}
+        >
+          <Home />
+          <h1 className="ml-3">Home</h1>
+        </div>
         <div
           className={`flex justify-start py-2 px-2 mt-6 cursor-pointer hover:text-[#6c63ff] hover:bg-gray-100 rounded-md
           ${
@@ -66,6 +81,26 @@ export default function Navigation() {
         >
           <BarChart />
           <h1 className="ml-3">Statistics</h1>
+        </div>
+        <div
+          className={`flex justify-start py-2 px-2 mt-6 cursor-pointer hover:text-[#6c63ff] hover:bg-gray-100 rounded-md
+          ${
+            pathname == '/messages'
+              ? 'text-[#6c63ff] bg-gray-100'
+              : 'text-gray-400'
+          }
+          `}
+          onClick={() => navigate('/messages')}
+        >
+          <Chat />
+          <h1 className="ml-3">Chat</h1>
+        </div>
+        <div
+          className="flex justify-start py-2 px-2 mt-6 cursor-pointer text-gray-400 hover:text-[#6c63ff] hover:bg-gray-100 rounded-md"
+          onClick={handleLogOut}
+        >
+          <Logout />
+          <h1 className="ml-3 truncate">Log Out</h1>
         </div>
       </div>
     </div>
