@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { viewProductDetails } from 'services/product.service'
 import { Grid, Button, Card, CardActionArea, Modal } from '@mui/material'
@@ -11,7 +11,7 @@ import { addToCart, getTotalCartItems } from 'services/cart.service'
 import Navigation from 'components/Navigation'
 
 export default function Details() {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
   const { productID } = useParams()
   const [isLoading, setIsLoading] = useState(false)
   const [product, setProduct] = useState({})
@@ -19,6 +19,7 @@ export default function Details() {
   const [viewImage, setViewImage] = useState(false)
   const [cartNumber, setCartNumber] = useState(0)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   useEffect(() => {
     setIsLoading(true)
@@ -72,7 +73,10 @@ export default function Details() {
             },
           )
         })
-    } else navigate('/login')
+    } else
+      navigate('/login', {
+        state: { currentPage: buyNowOption ? '/cart' : pathname },
+      })
   }
 
   return (

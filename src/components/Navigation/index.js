@@ -90,7 +90,7 @@ export default function Navigation() {
               : 'text-gray-400'
           }
           `}
-          onClick={() => navigate('/messages')}
+          onClick={() => navigate('/chat')}
         >
           <Chat />
           <h1 className="ml-3">Chat</h1>

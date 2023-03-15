@@ -35,3 +35,27 @@ export const getAllUsers = (data) => {
     data,
   })
 }
+
+export const getUser = (data) => {
+  return axios({
+    method: 'POST',
+    url: `${userURL}/get`,
+    data,
+  })
+}
+
+export const getFriends = (data) => {
+  return axios({
+    method: 'POST',
+    url: `${userURL}/getFriends`,
+    data,
+  })
+}
+
+export const addUser = (data) => {
+  return axios({
+    method: 'POST',
+    url: `${userURL}/add`,
+    data,
+  })
+}

@@ -18,7 +18,7 @@ const validationSchema = yup.object().shape({
 function LogInForm() {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -134,11 +134,17 @@ function LogInForm() {
             </Button>
             <div className="mt-6 text-center">
               <span className="text-gray-500">Don't have an account?</span>
-              <Link to="/signup">
-                <span className="font-semibold text-[#6c63ff] ml-1">
-                  Sign up
-                </span>
-              </Link>
+
+              <span
+                className="font-semibold cursor-pointer text-[#6c63ff] ml-1"
+                onClick={() =>
+                  navigate('/signup', {
+                    state: { currentPage: state.currentPage },
+                  })
+                }
+              >
+                Sign Up
+              </span>
             </div>
           </div>
         </form>

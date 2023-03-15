@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { getLatestTexts } from 'services/inbox.service'
 
 import { getInbox } from 'services/inbox.service'
-import { verifyToken } from 'services/user.service'
+import { getFriends } from 'services/user.service'
+import { verifyToken, getUser } from 'services/user.service'
 import socketClient from 'socket.io-client'
 import Content from './Content'
 import ChatSkeleton from './Skeleton'
@@ -14,10 +15,15 @@ import Users from './Users'
 
 const SERVER = 'http://127.0.0.1:9000'
 
+// disconnect socket
+// see who's online by looking into online users (BE)
+// order by latest msg
+
 export default function Messages() {
   const navigate = useNavigate()
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-  const [userList, setUserList] = useState([])
+  const [onlineUsers, setOnlineUsers] = useState([])
+  const [friends, setFriends] = useState([])
   const [receipient, setReceipient] = useState(null)
   const [isConnected, setIsConnected] = useState(false)
   const [messages, setMessages] = useState({})
@@ -42,6 +48,10 @@ export default function Messages() {
     } else {
       navigate('/login')
     }
+
+    return () => {
+      socketRef.current.disconnect()
+    }
   }, [])
 
   useEffect(() => {
@@ -57,13 +67,17 @@ export default function Messages() {
         }
       })
 
+      // Fetch friendlist
+      const data = {
+        token: localStorage.getItem('token'),
+      }
+      getFriends(data)
+        .then((res) => setFriends(res.data.message))
+        .catch((e) => console.log(e))
+
       // Run whenever a new user joins
       socketRef.current.on('users', async (users) => {
-        users = users.sort((a, b) => {
-          if (a.lastName < b.lastName) return -1
-          return a.lastName > b.lastName ? 1 : 0
-        })
-        setUserList(users)
+        setOnlineUsers(users)
         getLatestTexts({
           token: localStorage.getItem('token'),
           users,
@@ -83,7 +97,7 @@ export default function Messages() {
       socketRef.current.on('receiveMsg', ({ content, from }) => {
         const tempMsg = { ...messages }
 
-        userList.forEach((user) => {
+        onlineUsers.forEach((user) => {
           if (user._id == from) {
             const data = {
               content,
@@ -115,7 +129,7 @@ export default function Messages() {
         socketRef.current.off('receiveMsg')
       }
     }
-  }, [messages, userList])
+  }, [messages, onlineUsers])
 
   useEffect(() => {
     handleGetInbox()
@@ -131,7 +145,6 @@ export default function Messages() {
         .then((res) => {
           const tempMsg = { ...messages }
           tempMsg[receipient._id] = res.data.message
-          console.log(res.data.message)
           setMessages(tempMsg)
         })
         .catch((e) => {
@@ -181,7 +194,8 @@ export default function Messages() {
             <ChatSkeleton />
           ) : (
             <Users
-              users={[1]}
+              friends={friends}
+              onlineUsers={onlineUsers}
               setReceipient={setReceipient}
               setNewMessageNotification={setNewMessageNotification}
               newMessageNotification={newMessageNotification}

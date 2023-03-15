@@ -1,5 +1,5 @@
 import { useFormik } from 'formik'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { userSignup } from 'services/user.service'
@@ -25,7 +25,9 @@ const validationSchema = yup.object().shape({
 })
 
 export default function SignUpForm() {
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { state } = useLocation()
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleOnSubmit = (values) => {
     let data = {
@@ -35,15 +37,19 @@ export default function SignUpForm() {
       email: values.email,
       password: sha256(values.password),
     }
+
     userSignup(data)
       .then((res) => {
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('id', res.data.userID)
         enqueueSnackbar('Success', {
           variant: 'success',
           anchorOrigin: { vertical: 'top', horizontal: 'right' },
           autoHideDuration: 2000,
         })
+        if (state) navigate(state.currentPage)
+        else navigate('/')
       })
-      .then(() => window.location.replace('/login'))
       .catch((err) => {
         if (err?.response?.data) {
           enqueueSnackbar(err.response.data.message, {
@@ -163,7 +169,7 @@ export default function SignUpForm() {
           <TextField
             id="confirmPassword"
             name="confirmPassword"
-            type="confirmPassword"
+            type="password"
             label="Confirm Password"
             variant="outlined"
             className="grow ml-6"

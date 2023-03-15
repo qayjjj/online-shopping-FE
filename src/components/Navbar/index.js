@@ -8,6 +8,7 @@ import {
   ShoppingCart,
   Logout,
   Chat,
+  ClassSharp,
 } from '@mui/icons-material'
 
 import { verifyToken } from 'services/user.service'
@@ -31,7 +32,7 @@ export default function Navbar(props) {
 
   const handleLogOut = () => {
     localStorage.removeItem('token')
-    navigate('/')
+    setNavbarType('button')
   }
 
   return (
