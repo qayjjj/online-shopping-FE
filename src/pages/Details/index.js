@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { viewProductDetails } from 'services/product.service'
 import { Grid, Button, Card, CardActionArea, Modal } from '@mui/material'
 import { AddCircle, RemoveCircle, AddShoppingCart } from '@mui/icons-material'
-import { Fade } from 'react-reveal'
+import { Fade } from 'react-awesome-reveal'
 import DetailsSkeleton from './Skeleton'
 import DetailsNavbar from './Navbar'
 import { addToCart, getTotalCartItems } from 'services/cart.service'
@@ -80,13 +80,13 @@ export default function Details() {
   }
 
   return (
-    <div className="px-32 py-20">
+    <div className="w-screen px-32 py-20">
       <Navigation />
       <DetailsNavbar cartNumber={cartNumber} />
       {isLoading ? (
         <DetailsSkeleton />
       ) : (
-        <Fade bottom>
+        <Fade direction="up">
           <Card className="mt-8 h-[32rem]">
             <Grid container className="h-full">
               <Grid item md={6}>

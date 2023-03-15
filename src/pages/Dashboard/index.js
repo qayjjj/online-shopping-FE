@@ -21,7 +21,7 @@ import { verifyToken } from 'services/user.service'
 import { listProducts, deleteProduct } from 'services/product.service'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { Fade } from 'react-reveal'
+import { Fade } from 'react-awesome-reveal'
 import Navigation from 'components/Navigation'
 
 const listArraySkeleton = [1, 2, 3, 4]
@@ -103,7 +103,7 @@ export default function Dashboard() {
   return (
     <>
       <Navigation />
-      <div className="px-32 py-20 w-screen overflow-x-hidden">
+      <div className="px-32 py-20 w-screen">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-semibold">Dashboard</h1>
@@ -161,13 +161,18 @@ export default function Dashboard() {
               return (
                 // A single product display
                 <Grid item md={3} key={product._id}>
-                  <Fade bottom delay={100 * index}>
+                  <Fade
+                    direction="up"
+                    cascade
+                    delay={100 * index}
+                    triggerOnce={true}
+                  >
                     <Card>
                       <CardActionArea
                         onClick={() => navigate(`/details/${product._id}`)}
                       >
-                        <CardMedia className="h-44 overflow-hidden">
-                          <img src={product.image} />
+                        <CardMedia className="h-44 w-full overflow-hidden">
+                          <img className="min-h-full" src={product.image} />
                         </CardMedia>
                       </CardActionArea>
                       <CardContent className="justify-self-start text-left pb-0">
@@ -183,9 +188,16 @@ export default function Dashboard() {
                             onClick={() => handleShowProductForm(true, product)}
                           />
                         </div>
-                        <p className="text-gray-500 text-sm mt-2 truncate">
-                          {product.description}
-                        </p>
+                        {product.description ? (
+                          <p className="text-gray-500 text-sm mt-2 truncate">
+                            {product.description}
+                          </p>
+                        ) : (
+                          <p className="text-gray-300 text-sm mt-2 truncate">
+                            No description
+                          </p>
+                        )}
+
                         <p className="text-gray-700 text-sm mt-2">
                           $ {product.price}
                         </p>

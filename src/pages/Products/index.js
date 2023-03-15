@@ -13,6 +13,7 @@ import Footer from 'components/Footer'
 import Navbar from 'components/Navbar'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Fade } from 'react-awesome-reveal'
 import { getAllProducts } from 'services/product.service'
 
 const listArraySkeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -100,27 +101,36 @@ export default function Products() {
                 return (
                   // A single product display
                   <Grid item md={3} key={product._id}>
-                    <Card>
-                      <CardActionArea
-                        onClick={() => navigate(`/details/${product._id}`)}
-                      >
-                        <CardMedia className="h-44 overflow-hidden">
-                          <img
-                            src={product.image}
-                            className="w-full min-h-full"
-                          />
-                        </CardMedia>
-                        <CardContent className="justify-self-start text-left">
-                          <h1 className="text-2xl truncate">{product.name}</h1>
-                          <p className="text-gray-500 text-sm mt-2 truncate">
-                            {product.description}
-                          </p>
-                          <p className="text-gray-700 text-sm mt-2">
-                            $ {product.price}
-                          </p>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
+                    <Fade
+                      direction="up"
+                      cascade
+                      delay={100 * index}
+                      triggerOnce={true}
+                    >
+                      <Card>
+                        <CardActionArea
+                          onClick={() => navigate(`/details/${product._id}`)}
+                        >
+                          <CardMedia className="h-44 overflow-hidden">
+                            <img
+                              src={product.image}
+                              className="w-full min-h-full"
+                            />
+                          </CardMedia>
+                          <CardContent className="justify-self-start text-left">
+                            <h1 className="text-2xl truncate">
+                              {product.name}
+                            </h1>
+                            <p className="text-gray-500 text-sm mt-2 truncate">
+                              {product.description}
+                            </p>
+                            <p className="text-gray-700 text-sm mt-2">
+                              $ {product.price}
+                            </p>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Fade>
                   </Grid>
                 )
               })}
